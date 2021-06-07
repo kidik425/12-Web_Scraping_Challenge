@@ -8,20 +8,18 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/mars_app"
 mongo = PyMongo(app)
 
-# Or set inline
-# mongo = PyMongo(app, uri="mongodb://localhost:27017/phone_app")
-
 @app.route("/")
-def index():
-    listings = mongo.db.mars.find_one()
-    return render_template("../index.html", listings=listings)
+def home():
+    mars_data = mongo.db.collection.find_one()
+    return render_template("index.html", mars=mars_data)
 
 
 @app.route("/scrape")
 def scraper():
-    listings = mongo.db.mars
-    listings_data = scrape.scrape()
-    listings.update({}, listings_data, upsert=True)
+    mars_data = scrape.scrape()
+
+    mongo.db.collection.update({}, mars_data, upsert=True)
+    
     return redirect("/", code=302)
 
 

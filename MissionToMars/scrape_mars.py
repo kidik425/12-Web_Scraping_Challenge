@@ -50,7 +50,7 @@ def scrape():
     # Load URL into pandas
     tables = pd.read_html(urlGF)
 
-    df = tables[1]
+    df = tables[0]
 
     # convert df to html
     df.to_html(htmlMarsTable)
