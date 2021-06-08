@@ -6,44 +6,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Mars Vacation Home</title>
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="html" href="marsTable.html"
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
 </head>
+
+<header>
+  <div class="jumbotron text-center">
+    <h1>Mission to Mars</h1>
+    <p>Our next home!!!</p>
+    <p><a class="btn btn-primary btn-lg" href="/scraper" role="button">Scrape New Data</a></p>
+  </div>
+</header>
 
 <body>
   <div class="container-fluid">
 
-    <div class="jumbotron text-center">
-      <h1>Mission to Mars</h1>
-      <p>Our next home!!!</p>
-      <p><a class="btn btn-primary btn-lg" href="/scraper" role="button">Scrape New Data</a></p>
-    </div>
-
-    <div class="col-md-8">
+    <div class="col-md-9">
       <h3>Latest Mars News</h3>
       <h4>{{ mars.newsTitle }}</h4>
-      <h5>{{ mars.newsParagraph }}</h5>
+      <p>{{ mars.newsParagraph }}</p>
+      <h3> Featured Mars Image</h3>
+      <img src="{{ mars.featureImageURL }}" alt="Featured Mars Image">
     </div>
 
-    <div class=" col-md-4">
+    <div class="col-md-3">
       <h3>Mars Facts</h3>
-      <embed type="text/html" src="marsTable.html" width="120" height="120"/>
+      {{ mars.marsTable | safe}}
     </div>
-    <h3> Featured Mars Image</h3>
-    <img src="{{ mars.featureImageURL }}" alt="Featured Mars Image">
 
-    <div>
-      <h3>Mars Hemispheres</h3>
-      <ul style="list-style: none;">
+    <div class="container text-center">
+      <div class="col-md-12">
 
-        {% for hemi in mars.hemiUrls %}
-        <img src="{{ hemi.img_url }}" class="figure-img img-fluid rounded" alt="Heimspheres">
-        <li>{{ hemi.title }}</li>
-        {% endfor %}
+        <div class="row">
+          <h3 class="text-center">Mars Hemispheres</h3>
+        </div>
 
-      </ul> 
+        <span class="border border-primary">
+          <div class="row">
+            {% for hemi in mars.hemiUrls %}
+            <div class="col-md-3 border">
+              <img class="img-responsive img-small img-fluid rounded" src="{{ hemi.img_url }}" alt="Heimspheres">
+              <h6 class="text-center font-weight-bolder text-uppercase">{{ hemi.title }}</h6>
+            </div>
+            {% endfor %}
+          </div>
+        </span>
+
+      </div>
     </div>
   </div>
 </body>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul>
+          <li class="no-bullets text-center"><strong>Author:</strong> <a>Steve Walker</a></li>
+          <li class="no-bullets text-center"><strong>Email:</strong> <a>bsteven.walker@gmail.com</a></li>
+          <li class="no-bullets text-center"><strong>Github:</strong> <a
+              href="https://github.com/kidik425/">kidik425</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
 
 </html>
