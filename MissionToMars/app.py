@@ -14,7 +14,7 @@ def home():
     return render_template("index.html", mars=mars_data)
 
 
-@app.route("/scrape")
+@app.route("/scraper")
 def scraper():
     mars_data = scrape.scrape()
 

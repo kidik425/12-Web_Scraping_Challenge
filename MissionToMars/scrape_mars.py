@@ -39,6 +39,9 @@ def scrape():
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
 
+    # Capture image information 
+    featureImageSrc = soup.find('img', class_='headerimage')['src']
+    
     # Capture image URL 
     featureImageUrl = f"{urlSIM}/{featureImageSrc}"
 
