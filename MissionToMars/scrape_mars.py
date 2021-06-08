@@ -60,7 +60,7 @@ def scrape():
     #df #sanity check    
 
     # convert df to html
-    marsDataHtml = df.to_html(classes=['table','table striped','table hover']).replace('\n','')
+    marsDataHtml = df.to_html(classes=['table','table-striped','table-hover']).replace('\n','')
     marsDataHtml
 
 
