@@ -55,12 +55,17 @@ def scrape():
 
     df = tables[0]
 
+    df=df.rename(columns={0:"Description",1:"Mars",2:"Earth"},errors="raise")
+    df.set_index("Description",inplace=True)
+    #df #sanity check    
+
     # convert df to html
-    df.to_html(htmlMarsTable)
+    marsDataHtml = df.to_html(classes=['table','table striped','table hover']).replace('\n','')
+    marsDataHtml
 
 
     ##############################################
-    ######## 
+    ######## GET HEMISPHERES
     urlMH = 'https://marshemispheres.com'
     browser.visit(urlMH)
 
@@ -87,7 +92,34 @@ def scrape():
         picDict[picTitle]=f"{urlMH}/{picUrl}"
         urlList.append(picDict)  #combines the parent URL to pic URL
 
+    picsList = []
 
+    for url in urlList:
+        #print(url) #sanity check
+        for key, value in url.items():
+            #print(key +" - " + value)
+            browser.visit(value)
+            
+            html = browser.html
+            soup = BeautifulSoup(html, 'html.parser')
+            
+            picsDict = {}
+            
+            # Capture image information 
+            imageSrc = soup.find('img', class_='wide-image')['src']
+            #print(ImageSrc) #sanitycheck
+
+            # Capture full image URL 
+            imageUrl = f"{urlMH}/{imageSrc}"
+            #print(ImageUrl) #sanitycheck
+            
+            # Add above to dict
+            picsDict["title"] = key
+            picsDict["img_url"] = imageUrl
+            
+            # Add dict to list
+            picsList.append(picsDict)
+            
     # Quit the browser
     browser.quit()
 
@@ -96,7 +128,8 @@ def scrape():
         "newsTitle": newsT,
         "newsParagraph": newsP,
         "featureImageURL": featureImageUrl,
-        "marsTable": htmlMarsTable
+        "marsTable": marsDataHtml,
+        "hemiUrls": picsList
     }
 
 
