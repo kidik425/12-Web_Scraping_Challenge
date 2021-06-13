@@ -146,5 +146,3 @@ def scrapeHemis(browser):
             picsList.append(picsDict)
             
     return picsList
-
-print(scrape())
