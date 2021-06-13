@@ -14,7 +14,20 @@ def scrape():
 
     listings = {}
 
+    # # create return dict
+    marsData = {
+         "newsTitle": scrapeNews(browser)["newsTitle"],
+         "newsParagraph": scrapeNews(browser)["newsParagraph"],
+         "featureImageURL": scrapeImage(browser),
+         "marsTable": scrapeFacts(),
+         "hemiUrls": scrapeHemis(browser)
+    }
 
+  # Quit the browser
+    browser.quit()
+    return marsData
+
+def scrapeNews(browser):
     ##############################################
     ######## GET MARS NEWS
     urlRPS = 'https://redplanetscience.com'
@@ -23,6 +36,7 @@ def scrape():
     html = browser.html
     soup = BeautifulSoup(html, "html.parser")
 
+    newsDict = {}
     # Identify and return news title
     newsT = soup.find('div', class_='content_title').text
     # Identify and return news paragraph
@@ -30,7 +44,13 @@ def scrape():
     # Identify and return news date
     newsD = soup.find('div',class_='list_date').text
 
+    newsDict["newsTitle"] = newsT
+    newsDict["newsParagraph"] = newsP
+    
+    return newsDict
 
+
+def scrapeImage(browser):
     ##############################################
     ######## GET MARS SPACE IMAGE
     urlSIM = 'https://spaceimages-mars.com'
@@ -45,7 +65,10 @@ def scrape():
     # Capture image URL 
     featureImageUrl = f"{urlSIM}/{featureImageSrc}"
 
+    return featureImageUrl
 
+
+def scrapeFacts():
     ##############################################
     ######## GET MARS FACTS
     urlGF = 'https://galaxyfacts-mars.com'
@@ -61,9 +84,11 @@ def scrape():
 
     # convert df to html
     marsDataHtml = df.to_html(classes=['table','table-striped','table-hover']).replace('\n','')
-    marsDataHtml
+
+    return marsDataHtml
 
 
+def scrapeHemis(browser):
     ##############################################
     ######## GET HEMISPHERES
     urlMH = 'https://marshemispheres.com'
@@ -120,17 +145,6 @@ def scrape():
             # Add dict to list
             picsList.append(picsDict)
             
-    # Quit the browser
-    browser.quit()
+    return picsList
 
-    # create return dict
-    marsData = {
-        "newsTitle": newsT,
-        "newsParagraph": newsP,
-        "featureImageURL": featureImageUrl,
-        "marsTable": marsDataHtml,
-        "hemiUrls": picsList
-    }
-
-
-    return marsData
+print(scrape())
